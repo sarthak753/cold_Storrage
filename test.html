@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ThingSpeak Data Display</title>
+</head>
+
+<body>
+    <h1>ThingSpeak Data</h1>
+    <div id="data"></div>
+
+    <script>
+        // Your ThingSpeak channel ID and read API key
+        const channelId = '2288423';
+        const apiKey = '25523W64GV16T3GE';
+
+        // ThingSpeak API URL
+        const apiUrl = `https://api.thingspeak.com/channels/${channelId}/feeds.json?key=${apiKey}&results=1`;
+
+        // Function to fetch data from ThingSpeak
+        function fetchData() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const field1Value = data.feeds[0].field1;
+                    const field2Value = data.feeds[0].field2;
+                    const field3Value = data.feeds[0].field3;
+                    const field4Value = data.feeds[0].field4;
+                    const entryDate = data.feeds[0].created_at;
+
+                    document.getElementById('data').innerHTML = `Humidity Value: ${field1Value} <br>Temperature Value: ${field2Value} <br>Ethylene Value: ${field3Value}  <br>Respiration Value: ${field4Value} <br>Entry Date: ${entryDate}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        // Call the fetchData function initially
+        fetchData();
+        setInterval(fetchData, 5000);
+
+        // Set an interval to refresh the data every 5 seconds (5000 milliseconds)
+        setInterval(fetchData, 5000);
+    </script>
+</body>
+
+</html>
